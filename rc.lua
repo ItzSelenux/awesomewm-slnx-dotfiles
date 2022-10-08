@@ -18,6 +18,8 @@ local hotkeys_popup = require("awful.hotkeys_popup")
 -- when client with a matching name is opened:
 require("awful.hotkeys_popup.keys")
 
+
+
 -- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
 -- another config (This code will only ever execute for the fallback config)
@@ -46,10 +48,10 @@ end
 -- {{{ Variable definitions
 -- Themes define colours, icons, font and wallpapers.
 beautiful.init("~/.config/awesome/themes/selenium/theme.lua")
-gears.wallpaper.maximized("~/.config/awesome/wallpaper.png", s)
+gears.wallpaper.maximized("/home/itszariep/.wallpaper.jpg", s)
 
 -- This is used later as the default terminal and editor to run.
-terminal = "sakura %U"
+terminal = "sakura"
 editor = os.getenv("EDITOR") or "nvim"
 editor_cmd = terminal .. " -e " .. editor
 
@@ -91,8 +93,15 @@ myawesomemenu = {
    { "quit", function() awesome.quit() end },
 }
 
-mymainmenu = awful.menu({ items = { { "awesome", myawesomemenu, beautiful.awesome_icon },
-                                    { "open terminal", terminal }
+mymainmenu = awful.menu({ 
+	items = { 
+
+
+    { "Sakura", terminal, "/home/itszariep/.local/share/icons/ilustraciones/apps/utilities-terminal.svg" },
+    { "Nemo", "nemo", "/home/itszariep/.local/share/icons/ilustraciones/places/folder.svg" },
+		{ "Vivaldi", "vivaldi-stable", "/home/itszariep/.local/share/icons/ilustraciones/apps/vivaldi.svg"  },
+    { "awesome", myawesomemenu }
+																		
                                   }
                         })
 
@@ -232,10 +241,19 @@ awful.screen.connect_for_each_screen(function(s)
 		{ -- Top widgets
 			layout = wibox.layout.fixed.vertical,
 				s.mylayoutbox,
+				
+				{
+					wibox.widget.textclock(" %H\n %M"),
+					margins = 0,
+					widget  = wibox.container.margin,
+				},
+
 				{
 					wibox.widget.systray(),
 					margins = 0,
-					widget  = wibox.container.margin
+					widget  = wibox.container.margin,
+								direction = "west",
+			widget = wibox.container.rotate,
 				},
 
 		},
@@ -243,6 +261,7 @@ awful.screen.connect_for_each_screen(function(s)
 		{ -- Middle widget
 			direction = "east",
 			widget = wibox.container.rotate,
+			
 			s.mypromptbox,
 	
 		},
@@ -251,8 +270,7 @@ awful.screen.connect_for_each_screen(function(s)
 			layout = wibox.layout.fixed.vertical,
 			direction = "west",
 			widget = wibox.container.rotate,
-			s.mytasklist,				
-			s.mytaglist,		
+			s.mytasklist,	
 			mylauncher,
 			
 			
@@ -572,7 +590,6 @@ client.connect_signal("request::titlebars", function(c)
             awful.mouse.client.resize(c)
         end)
     )
-
     awful.titlebar(c) : setup {
         { -- Left
             awful.titlebar.widget.iconwidget(c),
@@ -589,6 +606,7 @@ client.connect_signal("request::titlebars", function(c)
         },
         { -- Right
             awful.titlebar.widget.floatingbutton (c),
+						awful.titlebar.widget.minimizebutton (c),
             awful.titlebar.widget.maximizedbutton(c),
             awful.titlebar.widget.stickybutton   (c),
             awful.titlebar.widget.ontopbutton    (c),
